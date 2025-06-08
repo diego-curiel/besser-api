@@ -4,7 +4,14 @@ from typing import Annotated
 
 from fastapi import Depends
 from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, Session, declared_attr, sessionmaker
+from sqlalchemy.orm import (
+    DeclarativeBase, 
+    Mapped, 
+    Session, 
+    declared_attr, 
+    mapped_column, 
+    sessionmaker,
+)
 
 engine = create_engine("sqlite:///db.sqlite3")
 
@@ -21,6 +28,12 @@ class Base(DeclarativeBase):
     @declared_attr.directive
     def __table_name__(cls):
         return resolve_table_name(cls.__name__)
+
+
+    # Primary key
+    @declared_attr
+    def id() -> Mapped[int]:
+        return mapped_column(primary_key=True)
 
 
 @contextmanager
