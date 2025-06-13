@@ -1,8 +1,7 @@
 from contextlib import contextmanager
 import re
-from typing import Annotated, Generator
+from typing import Generator
 
-from fastapi import Depends
 from sqlalchemy import create_engine
 from sqlalchemy.orm import (
     DeclarativeBase, 
@@ -57,5 +56,3 @@ def get_db() -> Generator[Session]:
     with get_session() as session, session.begin():
         yield session
 
-
-SessionDep = Annotated[Session, Depends(get_db)]
