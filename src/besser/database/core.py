@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 import re
-from typing import Annotated
+from typing import Annotated, Generator
 
 from fastapi import Depends
 from sqlalchemy import create_engine
@@ -37,7 +37,7 @@ class Base(DeclarativeBase):
 
 
 @contextmanager
-def get_session():
+def get_session() -> Generator[Session]:
     """Ensures that the session is closed after use."""
     session = SessionLocal()
 
@@ -53,4 +53,9 @@ def get_session():
         session.close()
 
 
-SessionDep = Annotated[Session, Depends(get_session)]
+def get_db() -> Generator[Session]:
+    with get_session() as session, session.begin():
+        yield session
+
+
+SessionDep = Annotated[Session, Depends(get_db)]
