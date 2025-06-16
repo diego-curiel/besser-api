@@ -25,7 +25,7 @@ def resolve_table_name(name):
 
 class Base(DeclarativeBase):
     @declared_attr.directive
-    def __table_name__(cls):
+    def __tablename__(cls):
         return resolve_table_name(cls.__name__)
 
 
