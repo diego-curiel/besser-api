@@ -31,7 +31,7 @@ class Base(DeclarativeBase):
 
     # Primary key
     @declared_attr
-    def id() -> Mapped[int]:
+    def id(cls) -> Mapped[int]:
         return mapped_column(primary_key=True)
 
 
