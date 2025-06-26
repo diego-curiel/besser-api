@@ -36,9 +36,12 @@ class Base(DeclarativeBase):
 
 
 @contextmanager
-def get_session() -> Generator[Session]:
+def get_session(
+    session_maker: sessionmaker[Session],
+) -> Generator[Session]:
     """Ensures that the session is closed after use."""
-    session = SessionLocal()
+
+    session = session_maker()
 
     try:
         yield session
@@ -53,6 +56,5 @@ def get_session() -> Generator[Session]:
 
 
 def get_db() -> Generator[Session]:
-    with get_session() as session, session.begin():
+    with get_session(session_maker=SessionLocal) as session:
         yield session
-
